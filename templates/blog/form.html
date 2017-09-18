@@ -1,0 +1,36 @@
+{% extends 'account/base.html' %}
+
+    {% comment %} {% block content %}
+        <h1>New post</h1>
+        <form method="POST" class="post-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-default">Save</button>
+        
+    {% endblock %} {% endcomment %}
+
+{% block content %}
+    <div class="container-newpost">
+        <h1>New post</h1>
+        <form method="POST" class="post-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_title">Title:</label> 
+            <input name="title" maxlength="255" required="" id="id_title" type="text">
+            <label for="id_text">Text:</label> 
+            <textarea name="text" rows="10" cols="40" required="" id="id_text"></textarea>
+            <label for="id_image">Image:</label> 
+            <input name="image" id="id_image" type="file">
+            <button type="submit" class="save btn btn-default">Save</button>
+        </form>
+    </div>
+{% endblock %}
+
+    
+
+
+
+    
+
+
+
+

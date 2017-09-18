@@ -1,0 +1,86 @@
+{% extends 'account/base.html' %}
+
+{% block page_title %}
+    Home
+{% endblock %}
+
+
+
+{% load staticfiles %}
+{% block content %}
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post-content">
+                <div class="post-container">
+                    <div>
+                        {% if post.image %}
+                            <a href="{{ post.image.url}}">
+                                <img class="image-post" src="{{ post.image.url }}" alt=""> 
+                            </a>
+                        {% comment %} {% else %}
+                            <a href="{% static 'img/blank.jpg' %}">
+                                <img class="image-blank" src="{% static 'img/blank.jpg' %}" alt=""> 
+                            </a> {% endcomment %}
+                        {% endif %}
+                    </div> 
+                    <div class="container-post">
+                        <h6 class="date">{{ post.created_date }}</h6>
+                        <h3>{{ post.title }}</h3>
+                        {% if post.text|length < 500 %}
+                        <p>{{ post.text }}</p>
+                        {% else %}
+                        <p class="text">{{ post.text|truncatechars:500  }}</p>
+                            {% comment %} <p class="author">By: <span>{{ post.author|title }}</span></p> {% endcomment %}
+                        {% endif %}
+                    </div>
+                </div>  
+                <div class="button">
+                    {% if user.is_authenticated %}
+                        <a class="style-button" href="/post/update/{{post.pk}}/">Update</a>
+                        <a class="style-button" href="{% url 'blog:detail' post.id %}">More</a>
+                        <form class="right" method="POST" action="{% url 'blog:delete' post.pk %}">
+                            {% csrf_token %}
+                            <input class="style-button" type="submit" value="Delete">
+                        </form> 
+                    {% else %}
+                        <a class="style-button" href="/accounts/login">Update</a>
+                        <a class="style-button" href="/accounts/login">More</a>
+                        <form class="right" method="GET" action="/accounts/login">
+                            {% csrf_token %}
+                            <input class="style-button" type="submit" value="Delete">
+                        </form>
+                    {% endif %}
+                </div>    
+            </div> 
+            {% comment %} <div class="content container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="post">
+                            <div class="date">
+                                {{ post.created_date }}
+                            </div>
+                            <h1>{{ post.author }}</h1>
+                            
+                            <h1><a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a></h1> 
+                            <div class="container-image">
+                                {% if post.image %}
+                                    <a href="{{ post.image.url}}">
+                                        <img class="image-post" src="{{ post.image.url }}" alt=""> 
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <p>{{ post.text|linebreaksbr }}</p>
+                            <a href="/post/update/{{post.pk}}/">UpDate</a>
+                            <form class="right" method="POST" action="{% url 'blog:delete' post.pk %}">
+                                {% csrf_token %}
+                                <input class="btn red darken-2" type="submit" value="DELETE">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div> {% endcomment %}
+        {% endfor %}
+    {% else %}
+        <h3>Se el primero y crea un Post</h3>
+    {% endif %}
+{% endblock %}
